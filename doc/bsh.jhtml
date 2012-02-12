@@ -1,0 +1,23 @@
+<html>
+<importbean bean="/atg/bsh/BshDroplet"/>
+<importbean bean="/atg/userprofiling/ProfileAdapterRepository"/>
+
+<head>
+
+</head>
+
+<body>
+
+This is some text.
+
+<droplet name="BshDroplet">
+  <param name="myparam" value="4"/>
+  <param name="repository" value="bean:ProfileAdapterRepository"/>
+  <oparam name="output">
+	<valueof param="name">no name</valueof> =
+	<valueof param="value">no value</valueof><br/>
+  </oparam>
+</droplet>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+import atg.repository.*;
+import atg.repository.rql.*;
+import atg.nucleus.*;
+
+import atg.droplet.*;
+
+Nucleus n = Nucleus.getGlobalNucleus();
+String repositoryArg = "repository";
+Repository rep = (Repository) n.resolveName("/blog/repository/BlogRepository");
+
+String rql = "ALL";
+RqlStatement stmt = RqlStatement.parseRqlStatement(rql);
+RepositoryView view = rep.getView("post");
+RepositoryItem[] items = stmt.executeQuery(view, null);
+RepositoryItemDescriptor userDescriptor = view.getItemDescriptor();
+
+String[] propNames = userDescriptor.getPropertyNames();
+
+for (int i = 0; i < items.length; i++)
+{
+	RepositoryItem user = items[i];
+	for (int j = 0; j < propNames.length; j++)
+	{
+		String propName = propNames[j];
+		Object value = user.getPropertyValue(propName);
+            System.out.println(propName + " " + value);
+	}
+}

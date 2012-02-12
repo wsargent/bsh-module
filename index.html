@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<title>Beanshell and Dynamo</title>
+</head>
+
+<body>
+<h1>Beanshell and Dynamo</h1>
+
+<p>
+This is the README for the Beanshell integration into ATG Dynamo.
+</p> 
+
+<h3>
+What is Beanshell?
+</h3>
+
+<blockquote>
+  Quoting from the manual: "BeanShell is a small, free, embeddable, Java source 
+  interpreter with object scripting language features, written in Java. 
+  BeanShell executes standard Java statements and expressions, in addition to 
+  obvious scripting commands and syntax. BeanShell supports scripted objects as 
+  simple method closures like those in Perl and JavaScript(tm)."
+</blockquote>
+
+<h3>
+No, what is it really?
+</h3>
+
+<blockquote>
+  Think of it as java code you don't have to recompile.  Like perl or something.
+  You just point the interpreter at the file you want to run, and it runs it.
+</blockquote>
+  
+<h3>
+What is ATG Dynamo?
+</h3>
+
+<blockquote>
+  From the manual: "The ATG Dynamo e-Business Platform is a flexible, Java-based 
+  platform for building personalized applications for the Web and other 
+  communication channels (e-mail messaging, wireless devices, etc.)."
+</blockquote>
+  
+<h3>
+In English?
+</h3>
+
+<blockquote>
+
+  Dynamo does a staggering amount of stuff, all the way from managing document 
+  workflow through portals to selling clothes online (and keeping track of what 
+  you've bought), to booking your flight tickets.  Big enterprise level web 
+  application stuff.  But basically it's a tool to make an HTML page from 
+  information in a database, or change a database from an HTML page.
+  
+</blockquote>
+
+<h3>
+Why would I want to use Beanshell with Dynamo?
+</h3>
+
+<blockquote>
+  Dynamo has great features.  Beanshell works well with them.  In particular, 
+  Nucleus components works particularly well with Beanshell; since you can
+  create new instances of droplets and form handlers and only deal with them
+  through an interface, you don't particularly care whether they use Beanshell
+  or not behind the scenes.
+</blockquote>
+  
+<h3>
+What is included in this package?
+</h3>
+
+<blockquote>
+  <p>
+  A small amount of source code is included in this file showing how you can
+  tweak Dynamo to execute Beanshell scripts.  There's nothing especially 
+  hairy or complicated involved, except perhaps in the HttpServer.  Ant files
+  are provided so that you can compile everything, and the JBuilder code project
+  if you use that sort of thing.
+  </p>
+  
+  <p>
+  Some example beanshell scripts and components are also included.  These give
+  a sample of what can be done without too much tweaking.
+  </p>  
+</blockquote>
+
+<h3>
+How do I install it?
+</h3>
+
+<blockquote>
+  <p>
+  First of all, download it from <a
+  href="http://people.atg.com/~wsargent/bsh/bsh.zip">http://people.atg.com/~wsargent/bsh/bsh.zip</a>
+  and unzip it into an empty directory.
+  </p>
+
+  <p>
+  You will need Ant and Dynamo 5 or higher to compile the code.  You should have
+  an environment variable DYNAMO_HOME set to your Dynamo installation; the ant
+  script will use this for finding the DAS and DPS libraries.
+  </p>
+  
+  <p>
+  'ant all' will compile all the necessary files and package them in an
+  application module.  After that, you can run the Bsh module with 
+  'startDynamo -m Bsh'.
+  </p>
+</blockquote>
+
+<h3>
+What do each of the scripts do?
+</h3>
+
+<blockquote>
+  <p>
+  converter.bsh is a fairly stupid example of a custom tag converter.  You can
+  use it in conjunction with a JHTML page to alter the text that gets passed
+  into a formhandler. 
+  </p>
+  
+  <p>
+  script.bsh is an example of repository manipulation in Beanshell.  You can
+  pass in the profile repository, and it will query it for all the users and
+  their properties and set output parameters and oparams on the request.
+  </p>
+  
+  <p>
+  server.bsh is a hack to make Serverina pass in additional headers to the 
+  servlet pipeline so that we can pretend we've been passed extra info from the
+  HTTP server.  
+  </p>
+  
+  <p>
+  rqlbrowser.zip will also show you how to make RQL queries passed into Bsh.
+  </p>
+</blockquote>   
+   
+<h3>
+So what would I use this for?
+</h3>
+
+<blockquote>
+  Here are some of the possibilities:
+  
+  <ul>   
+    <li>test code without having to create a component and write the JHTML</li>
+    <li>write Dynamo code within bsh without having to compile and restart Dynamo</li>
+    <li>script stuff and convert it to Java code</li>
+    <li>get a handle to the global Nucleus and run wild
+    <li>can be set up to do some internal dynamic class loading without 
+      using Dynamo's dynamic class loader</li>
+    <li>can be exposed through a telnet/http server interface, so that you can 
+      attach to running JVMs and examine real-time state. Not very secure, but
+      great for debugging.</li>
+  </ul>
+</blockquote>
+
+<p>
+Additions and feedback is welcomed.  Will Sargent <a href="mailto:will_sargent@yahoo.com">&lt;will_sargent@yahoo.com&gt;</a>
+</p>
+
+<h3>DISCLAIMER</h3>
+  
+<p>
+  The entire package comes with <strong>ABSOLUTELY NO WARRANTY</strong>. 
+  
+  You run this code at your own risk. 
+  
+  ATG and myself are not responsible for this code and will take no responsibility for your use or abuse of it.   
+</p> 
+ 
+</body>
+</html>

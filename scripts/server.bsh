@@ -1,0 +1,31 @@
+import atg.core.util.*;
+
+Integer numHeaders = 0;
+ByteString[] headers;
+
+if (method != void && method.equals("prepareRequest"))
+{
+    numHeaders = new Integer(1);
+    headers = new ByteString[numHeaders.intValue()];
+    String headerName = "SM_USER";
+    String headerValue = "wsargent";
+    
+    String headerString = headerName + ": " + headerValue;
+    byte[] headerBytes = headerString.getBytes();
+    ByteString header = new ByteString(headerBytes, 0, headerBytes.length);
+    headers[0] = header;
+    server.logDebug(method + ": " + header);
+                  
+    if ( headers != null && headers.length > 0 )
+    {
+        int size = mHeaderLines.length + headers.length;
+        ByteString [] tmp = new ByteString [ size ];
+        System.arraycopy (mHeaderLines, 0, tmp, 0, mHeaderLines.length);
+        mHeaderLines = tmp;
+    
+        for (int i = 0; i < headers.length; i++)
+        {
+            mHeaderLines [mNumHeaderLines++] = headers[i];
+        }
+    }
+} 

@@ -1,0 +1,118 @@
+<project name="Library of Build Targets" default="lib:build">
+
+  <!-- Set build process properties -->
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="config.dir" value="${basedir}/config"/>
+  <property name="inf.dir" value="${basedir}/inf"/>
+  <property name="lib.dir" value="${basedir}/lib"/>
+  <property name="scripts.dir" value="${basedir}/scripts"/>
+  
+  <property name="install.dir" value="${dynamo.home}/../${proj.name}"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="stage.dir" value="${build.dir}/stage"/>
+  <property name="jar.dir" value="${build.dir}/jar"/>  
+
+  <!-- 
+       This build assumes an installed copy of Dynamo 5.2 or later
+       Components from Dynamo are needed inorder to build this
+       application and deploy it
+    -->
+
+  <!-- Set the CLASSPATH -->
+  <path id="dynamo.classpath">
+    <fileset dir="${dynamo.home}/../DAS/lib"><include name="**/*.jar"/></fileset>
+    <fileset dir="${dynamo.home}/../DPS/lib"><include name="**/*.jar"/></fileset>
+  </path>    
+  
+  <path id="bsh.classpath">
+    <fileset dir="${lib.dir}"><include name="**/*.jar"/></fileset>
+  </path>
+  
+  <!-- Prepare the build -->
+  <target name="internal:prepare">
+    <!-- Create the timestamp -->
+    <tstamp/>
+    <!-- Create the directories used in the build process -->
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${jar.dir}"/>    
+  </target>
+
+  <!-- Build the tag libs for use in the wars -->
+  <target name="lib:compile-classes" depends="internal:prepare" if="proj.src.dir">
+    <javac srcdir="${proj.src.dir}" source="1.4" target="1.4" destdir="${classes.dir}" debug="on" deprecation="off" optimize="off">
+      <classpath path="${classpath}"/>
+      <classpath refid="dynamo.classpath"/>
+      <classpath refid="bsh.classpath"/>
+      <include name="**/*.java"/>
+    </javac>
+    <!-- copy resource files to build directory -->
+    <copy todir="${classes.dir}">
+      <fileset dir="${proj.src.dir}/" >
+        <include name="**/*.properties"/>
+        <include name="**/*.dtd"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Build classes to be added to Dynamo's CLASSPATH -->
+  <target name="internal:create-dynamolib" depends="lib:compile-classes">
+    <jar jarfile="${jar.dir}/classes.jar" basedir="${classes.dir}/" whenempty="skip"
+         includes="atg/**"/>
+  </target>
+
+
+  <target name="lib:build" depends="internal:create-dynamolib"/>
+
+  <!-- Install the built libraries and archive files into the Dynamo install -->
+  <target name="lib:devinstall">
+    <delete dir="${install.dir}"/>
+    <antcall target="lib:devinstall-no-delete"/>
+  </target>
+ 
+  <target name="lib:devinstall-no-delete">
+    <mkdir dir="${install.dir}"/>
+    <mkdir dir="${install.dir}/META-INF"/>
+    <copy file="./inf/MANIFEST.MF" todir="${install.dir}/META-INF"/>
+    <available file="${jar.dir}/classes.jar" property="classes.jar.exists"/>
+    <antcall target="internal:devinstall-classes.jar"/>
+    <available file="${lib.dir}" property="lib.dir.exists"/>
+    <antcall target="internal:devinstall-lib"/>
+    <available file="${config.dir}" property="config.dir.exists"/>
+    <antcall target="internal:devinstall-config"/>
+    <antcall target="internal:devinstall-scripts"/>
+  </target>
+  
+  <target name="internal:devinstall-lib" if="lib.dir.exists">
+    <mkdir dir="${install.dir}/lib"/>
+    <copy todir="${install.dir}/lib">
+        <fileset dir="${lib.dir}"/>
+    </copy>
+  </target>
+
+  <target name="internal:devinstall-classes.jar">
+    <mkdir dir="${install.dir}/lib"/>
+    <copy file="${jar.dir}/classes.jar" todir="${install.dir}/lib"/>
+  </target>
+
+  <target name="internal:devinstall-config" if="config.dir.exists">
+    <mkdir dir="${install.dir}/config"/>    
+    <copy todir="${install.dir}/config">
+      <fileset dir="${config.dir}"/>
+    </copy>
+  </target>
+
+  <target name="internal:devinstall-scripts">
+    <mkdir dir="${install.dir}/scripts"/>    
+    <copy todir="${install.dir}/scripts">
+      <fileset dir="${scripts.dir}"/>
+    </copy>  
+  </target>
+
+  <target name="lib:all" depends="lib:clean, lib:build, lib:devinstall"/>
+
+  <target name="lib:clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+</project>

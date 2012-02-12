@@ -1,0 +1,33 @@
+// This script calls a tag converter through beanshell.
+
+Object convert()
+{
+    if (converter.isLoggingDebug())
+    {
+        converter.loggingDebug(method);
+    }
+    
+    if (method.equals("convertStringToObject"))
+    {
+        return convertStringToObject(request, value, attributes);
+    }
+
+    if (method.equals("convertObjectToString"))
+    {
+        return convertObjectToString(request, value, attributes);
+    }
+}
+
+String convertObjectToString(pRequest, pValue, pAttributes)
+{  
+    return pValue + " in bed!";
+}
+
+
+Object convertStringToObject(pRequest, pValue, pAttributes)
+{
+    return "object";
+}
+
+// main method.
+result = convert();

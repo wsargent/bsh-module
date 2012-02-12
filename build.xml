@@ -1,0 +1,38 @@
+<project name="bsh" default="build" basedir=".">
+
+  <!-- Set project specific properties -->
+  <property name="proj.name" value="Bsh"/>
+  <property name="proj.dynamo.module" value="${proj.name}"/>
+  <property name="proj.src.dir" value="./src"/>
+  <property name="buildtools.path" value="."/>
+
+  <property environment="myenv"/>
+  <property name="dynamo.home" value="${myenv.DYNAMO_HOME}"/>
+   
+  <!-- Build process targets -->
+  <target name="all">
+    <ant antfile="${buildtools.path}/build_lib.xml" dir="${basedir}" target="lib:all"/>
+  </target>
+  
+  <target name="compile-classes">
+    <ant antfile="${buildtools.path}/build_lib.xml" dir="${basedir}" target="lib:compile-classes"/>
+  </target>
+  
+  <target name="build">
+    <ant antfile="${buildtools.path}/build_lib.xml" dir="${basedir}" target="lib:build"/>
+  </target>
+  
+  <!-- Install the built libraries and archive files into the Dynamo install -->
+  <target name="devinstall">
+    <ant antfile="${buildtools.path}/build_lib.xml" dir="${basedir}" target="lib:devinstall"/>
+  </target>
+
+  <!-- Clean the build environment -->
+  <target name="clean">
+    <ant antfile="${buildtools.path}/build_lib.xml" dir="${basedir}" target="lib:clean"/>
+  </target>
+
+</project>
+
+
+

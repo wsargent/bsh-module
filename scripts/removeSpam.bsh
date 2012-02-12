@@ -1,0 +1,17 @@
+import atg.repository.*;
+import atg.repository.rql.*;
+
+String repositoryArg = "repository";
+RepositoryImpl rep = (RepositoryImpl) nucleus.resolveName("/blog/repository/BlogRepository");
+
+String rql = "body contains \"holdem\"";
+RqlStatement stmt = RqlStatement.parseRqlStatement(rql);
+RepositoryView view = rep.getView("comment");
+RepositoryItem[] items = stmt.executeQuery(view, null);
+for (int i = 0; i < items.length; i++)
+{
+    RepositoryItem item = items[i];
+    String id = item.getRepositoryId();
+    RepositoryUtils.removeReferencesToItem(item);
+    rep.removeItem(id, "comment"); 
+}
